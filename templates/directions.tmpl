@@ -1,0 +1,49 @@
+{{ define "directions" }}
+{{ template "header" .}}
+
+<div class="row">
+<div class="col sm-12">
+    <a href="/">← Make another road trip fun!</a>
+</div>
+</div>
+<div class="row">
+<div class="col sm-12">
+<p><strong><em>{{ .Route.OriginName }} → {{ .Route.DestinationName }} </em></strong><br><small>Permalink to your trip: <a href="/directions/{{ .MapID }}">/directions/{{ .MapID }}</a></small></p>
+</div>
+<div class="col sm-8">
+<p>Your trip is about {{ .Route.TotalDrivingDistance }} and will take about {{ .Route.TotalDrivingTime }}. Thank goodness there are <strong>{{ len .Features }} funky attractions</strong> along the way, including the <em>{{ .RandomAttraction.Properties.Title }}</em>!</p>
+</div>
+<div class="col sm-4">
+<img src="/static/img/car.png">
+</div>
+
+</div>
+
+
+<div class="row">
+    <div class="col sm-12">
+    <h2>Map</h2>
+    <p><a href="/map/{{ .MapID }}" target="_blank">Open map in a new window</a>. Click <a href="https://www.google.ca/maps/dir/{{ .Route.OriginName }}/{{ .Route.DestinationName }}">here for the Google Map directions</a>.</p>
+<iframe src="/map/{{ .MapID }}" style="width:100%;height:400px;"></iframe>
+</div>
+</div>
+
+
+    <div class="row">
+    <div class="col sm-12">
+    <h2>Funky attractions</h2>
+    <p>Here's a list of all <strong>{{ len .Features }} funky attractions</strong> that are within 20 minutes of the main route! They are listed in order that you will reach them, with the number of miles from the last city you cross through.</p>
+    </div>
+    {{range .Features}}
+    <div class="col sm-12">
+    {{ with .Properties.CityThatIsClose }}
+    <h4>from {{.}}</h4>
+    {{ end }}
+    {{.Properties.DistanceFromLastCity}} - <a href="https://www.google.com/search?btnI=1&q={{.Properties.Title}} -site:roadsideamerica.com -site:pinterest.com -site:tripadvisor.ca -site:tripadvisor.com" target='_blank'>{{.Properties.Title}}</a> at 
+    <a target='_blank' href='https://www.google.com/maps/place/{{ index .Geometry.Coordinates 1 }},{{ index .Geometry.Coordinates 0 }}'>{{ .Properties.Address }}</a>
+    </div>
+    {{end}}
+    </div>
+
+{{ template "footer" .}}
+{{ end }}

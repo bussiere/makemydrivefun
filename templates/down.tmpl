@@ -1,0 +1,12 @@
+{{ define "down" }}
+{{ template "header" .}}
+<div class="row">
+<div class="col sm-12">
+<h2>Not {{ .Acknowledge }}!</h2>
+<p>Sorry, currently OSRM server is down. Please check back later!</p>
+</div>
+</div>
+
+
+{{ template "footer" .}}
+{{ end }}

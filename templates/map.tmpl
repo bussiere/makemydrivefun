@@ -1,0 +1,72 @@
+{{ define "map" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ .Route.OriginName }} to {{ .Route.DestinationName }}</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+<script>
+  var routeJSON = {{  .GeoJSON  }}
+  var map = L.map('map').fitBounds([
+    [{{ .Route.Origin.Latitude }}, {{ .Route.Origin.Longitude }}],
+    [{{ .Route.Destination.Latitude }}, {{ .Route.Destination.Longitude }}]
+]);
+
+L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+
+	function onEachFeature(feature, layer) {
+		var popupContent = "<strong>" +
+				feature.properties.title + "</strong><br><a target='_blank' href='https://www.google.com/maps/place/"+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0]+"/'>"+feature.properties.address+"</a>";
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	L.geoJSON(routeJSON, {
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+        var greenIcon = new L.Icon({
+        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+        });
+        var redIcon = new L.Icon({
+        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+        });
+    L.marker([{{ .Route.Origin.Latitude }}, {{ .Route.Origin.Longitude }}], {icon: greenIcon}).addTo(map).bindPopup("<b>{{ .Route.OriginName }}</b>");
+    L.marker([{{ .Route.Destination.Latitude }}, {{ .Route.Destination.Longitude }}], {icon: redIcon}).addTo(map).bindPopup("<b>{{ .Route.Destination }}</b>");
+
+  </script>
+</body>
+</html>
+{{ end }}
