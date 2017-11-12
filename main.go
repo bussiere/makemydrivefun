@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"log"
@@ -14,10 +15,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const osrmServer = "http://localhost:5000"
-const geoipServer = "http://localhost:5006"
+var (
+	osrmServer, geoipServer string
+)
 
 func main() {
+	flag.StringVar(&osrmServer, "osrm", "http://osrm.makemydrive.fun", "address of OSRM server")
+	flag.StringVar(&geoipServer, "geoip", "http://geoip.makemydrive.fun", "address of GeoIP server")
+	flag.Parse()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	store := sessions.NewCookieStore([]byte("secret"))
@@ -50,7 +55,11 @@ type MainView struct {
 }
 
 func handleIndex(c *gin.Context) {
-	_, err := net.DialTimeout("tcp", strings.Replace(osrmServer, "http://", "", -1), 5*time.Second)
+	serverName := strings.Replace(osrmServer, "http://", "", -1)
+	if !strings.Contains(serverName, ":") {
+		serverName += ":80"
+	}
+	_, err := net.DialTimeout("tcp", serverName, 5*time.Second)
 	clientIP, errIP := GetClientIPHelper(c.Request)
 	var loc string
 	if errIP == nil {
