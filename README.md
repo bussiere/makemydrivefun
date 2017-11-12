@@ -4,7 +4,7 @@
 [![godocs](https://godoc.org/github.com/schollz/makemydrivefun?status.svg)](https://godoc.org/github.com/schollz/makemydrivefun) 
 
 
-This is a web app that lets you easily find novelty places to stop at on a road trip - places that you wouldn't normally find in a travel book. I decided to make this when I was planning on moving and wanted to find some fun places to stop along the way of my planned route. 
+This is the code that powers [makemydrive.fun](https://makemydrive.fun/), a web-app that finds quirky places (places that you wouldn't normally find in a travel book) along the route for a city-to-city road trip. I decided to make this when I was planning on moving and wanted to find some fun places to stop along the way of my planned route. 
 
 How does it work? At the top-level, it will generate a driving route between two cities and then it will attempt to find any of the [17,000 novelty features](https://github.com/schollz/makemydrivefun/blob/master/static/data/features.geojson) that are within 20 minutes driving distance of the route. These are then sorted, collated, and displayed on the web page. There are three "microservices" that are used to accomplish it - the makemydrivefun server, the OSRM routing server, and a GeoIP server. 
 
