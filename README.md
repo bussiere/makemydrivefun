@@ -64,6 +64,9 @@ After everything is setup you can then run with
 ```
 ./makemydrivefun -osrm http://localhost:5000 -geoip http://localhost:5006
 ```
+# Attributions
+
+Theme from <a href="https://github.com/rhyneav/papercss">@rhyneav's papercss</a>.<br><a href="https://www.vecteezy.com">Free Vectors via Vecteezy</a>
 
 # License
 
