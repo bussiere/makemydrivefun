@@ -48,6 +48,9 @@ Once installed, you can run with:
 docker run -d -t -i -p 5000:5000 -v $(pwd):/data osrm/osrm-backend osrm-routed --algorithm mld /data/north-america-latest.osrm
 ```
 
+_Note:_ Running the entire north america map (almost 400 million roads) will need about 27 GB of RAM/swap space.
+
+
 ## Install GeoIP server
 
 This is a self-contained docker project as well. Just run:
